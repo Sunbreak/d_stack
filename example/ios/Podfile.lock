@@ -2,10 +2,16 @@ PODS:
   - d_stack (0.0.1):
     - Flutter
   - Flutter (1.0.0)
+  - Masonry (1.1.0)
 
 DEPENDENCIES:
   - d_stack (from `.symlinks/plugins/d_stack/ios`)
   - Flutter (from `Flutter`)
+  - Masonry
+
+SPEC REPOS:
+  trunk:
+    - Masonry
 
 EXTERNAL SOURCES:
   d_stack:
@@ -16,7 +22,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   d_stack: d6545a7e9ce932cae16ece029a164fa777742abf
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
 
-PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
+PODFILE CHECKSUM: fc79651488e368aae0a3b596dbabae892a447fcc
 
 COCOAPODS: 1.10.1
