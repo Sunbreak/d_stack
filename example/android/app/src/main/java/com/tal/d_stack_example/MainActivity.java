@@ -6,6 +6,8 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.tal.d_stack.DStack;
+
 public class MainActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -14,11 +16,11 @@ public class MainActivity extends Activity {
         setTitle("MainActivity");
 
         findViewById(R.id.push_flutter_1).setOnClickListener((View v) -> {
-            System.out.println("push_flutter_1"); // TODO
+            DStack.getInstance().pushRoute("flutterPage1");
         });
 
         findViewById(R.id.push_flutter_2).setOnClickListener((View v) -> {
-            System.out.println("push_flutter_2"); // TODO
+            DStack.getInstance().pushRoute("flutterPage2");
         });
 
         findViewById(R.id.push_native_1).setOnClickListener((View v) -> {

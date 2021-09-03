@@ -1,5 +1,6 @@
 #import "MainViewController.h"
 #import "Masonry/Masonry.h"
+#import "d_stack/DStack.h"
 
 @interface MainViewController ()
 
@@ -44,14 +45,14 @@
 
     UIButton *pushFlutter1 = [UIButton buttonWithType:UIButtonTypeSystem
                primaryAction:[UIAction actionWithHandler:^(__kindof UIAction * _Nonnull action) {
-        NSLog(@"push_flutter_1");
+        [DStack.shared pushRoute:@"flutterPage1"];
     }]];
     [pushFlutter1 setTitle:@"push(FlutterPage1)" forState:UIControlStateNormal];
     [stack addArrangedSubview:pushFlutter1];
 
     UIButton *pushFlutter2 = [UIButton buttonWithType:UIButtonTypeSystem
                primaryAction:[UIAction actionWithHandler:^(__kindof UIAction * _Nonnull action) {
-        NSLog(@"push_flutter_2");
+        [DStack.shared pushRoute:@"flutterPage2"];
     }]];
     [pushFlutter2 setTitle:@"push(FlutterPage1)" forState:UIControlStateNormal];
     [stack addArrangedSubview:pushFlutter2];
