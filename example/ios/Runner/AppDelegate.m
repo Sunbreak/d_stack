@@ -1,10 +1,13 @@
 #import "AppDelegate.h"
 #import "GeneratedPluginRegistrant.h"
 #import "MainViewController.h"
+#import "d_stack/DStack.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [DStack.shared initialize];
+
     [GeneratedPluginRegistrant registerWithRegistry:self];
 
     self.window = [[UIWindow alloc] init];
