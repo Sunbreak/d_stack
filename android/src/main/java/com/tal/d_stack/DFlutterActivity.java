@@ -18,6 +18,7 @@ public class DFlutterActivity extends FlutterActivity {
     public static final String EXTRA_BACKGROUND_MODE = "background_mode";
     public static final String EXTRA_CACHED_ENGINE_ID = "cached_engine_id";
     public static final String EXTRA_DESTROY_ENGINE_WITH_ACTIVITY = "destroy_engine_with_activity";
+    public static final String EXTRA_NODE = "dnode";
 
     private FlutterView flutterView;
 
@@ -25,6 +26,9 @@ public class DFlutterActivity extends FlutterActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         flutterView = findFlutterView(getWindow().getDecorView());
+        // FIXME
+        DNode node = getIntent().getParcelableExtra(EXTRA_NODE);
+        System.out.println("node " + node.identifier);
     }
 
     private FlutterView findFlutterView(View view) {
@@ -84,17 +88,24 @@ public class DFlutterActivity extends FlutterActivity {
         private final String cachedEngineId;
         private final boolean destroyEngineWithActivity = false;
         private final String backgroundMode = io.flutter.embedding.android.FlutterActivityLaunchConfigs.BackgroundMode.opaque.name();
+        private DNode node;
 
         public CachedEngineIntentBuilder(Class<? extends Activity> activityClass, String cachedEngineId) {
             this.activityClass = activityClass;
             this.cachedEngineId = cachedEngineId;
         }
 
+        public CachedEngineIntentBuilder setNode(DNode node) {
+            this.node = node;
+            return this;
+        }
+
         public Intent build(Context context) {
             return new Intent(context, activityClass)
                     .putExtra(EXTRA_CACHED_ENGINE_ID, cachedEngineId)
                     .putExtra(EXTRA_DESTROY_ENGINE_WITH_ACTIVITY, destroyEngineWithActivity)
-                    .putExtra(EXTRA_BACKGROUND_MODE, backgroundMode);
+                    .putExtra(EXTRA_BACKGROUND_MODE, backgroundMode)
+                    .putExtra(EXTRA_NODE, node);
         }
     }
 }
