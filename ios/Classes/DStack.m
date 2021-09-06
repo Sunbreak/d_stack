@@ -1,7 +1,7 @@
 #import "DStack.h"
 #import <Flutter/Flutter.h>
 #import <UIKit/UIKit.h>
-#import "DFlutterViewController.h"
+#import "DNavigationManager.h"
 
 NSString * const EngineId = @"d_stack_engine";
 
@@ -30,10 +30,7 @@ NSString * const EngineId = @"d_stack_engine";
 }
 
 - (void)pushRoute:(NSString *)routeName {
-    // TODO routeName
-    UINavigationController *navigation = UIApplication.sharedApplication.keyWindow.rootViewController;
-    navigation.navigationBarHidden = YES;
-    [navigation pushViewController:[[DFlutterViewController alloc] init] animated:YES];
+    [DNavigationManager.shared pushRoute:routeName];
 }
 
 @end

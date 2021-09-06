@@ -8,7 +8,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [DStack.shared initialize];
 
-    [GeneratedPluginRegistrant registerWithRegistry:self];
+    [GeneratedPluginRegistrant registerWithRegistry:DStack.shared.flutterEngine];
 
     self.window = [[UIWindow alloc] init];
     self.window.bounds = [[UIScreen mainScreen] bounds];
