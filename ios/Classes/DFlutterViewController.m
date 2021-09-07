@@ -3,12 +3,23 @@
 
 @interface DFlutterViewController ()
 
+// private setter
+@property (nonatomic, strong, readwrite) DNode *node;
+
 - (void)attachToEngine;
 - (void)detachFromEngine;
 
 @end
 
 @implementation DFlutterViewController
+
+- (instancetype)initWithDNode:(DNode *)node {
+    self = [super init];
+    if (self) {
+        _node = node;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
