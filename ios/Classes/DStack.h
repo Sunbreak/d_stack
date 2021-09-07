@@ -3,6 +3,8 @@
 
 FOUNDATION_EXPORT NSString * const EngineId;
 
+typedef UIViewController *(^NativeRoute)(void);
+
 @interface DStack: NSObject
 
 @property (class, nonatomic, readonly) DStack *shared;
@@ -12,6 +14,8 @@ FOUNDATION_EXPORT NSString * const EngineId;
 - (instancetype)init NS_UNAVAILABLE;
 
 - (void)initialize;
+
+- (void)registerRoute:(NSDictionary<NSString *, NativeRoute> *)routeMap;
 
 - (void)pushRoute:(NSString *)routeName;
 

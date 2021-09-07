@@ -72,19 +72,29 @@ import java.util.UUID;
 
     private Context appContext;
 
+    private final Map<String, DStack.NativeRoute> routeMap = new HashMap<>();
+
     private final List<List<DNode>> nodeGroups = new ArrayList<>();
 
     public void init(Context context) {
         appContext = context.getApplicationContext();
     }
 
+    public void registerRoute(Map<String, DStack.NativeRoute> routeMap) {
+        this.routeMap.putAll(routeMap);
+    }
+
     public void pushRoute(String routeName) {
         DNode node = new DNode(UUID.randomUUID().toString(), routeName);
         putNodeIfAbsent(node);
 
-        // TODO push native page
-        Intent intent = DFlutterActivity.withCachedEngineD(DStack.ENGINE_ID).setNode(node).build(appContext);
-        appContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        if (routeMap.containsKey(routeName)) {
+            Intent intent = routeMap.get(routeName).build(appContext).putExtra(DFlutterActivity.EXTRA_NODE, node);
+            appContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        } else {
+            Intent intent = DFlutterActivity.withCachedEngineD(DStack.ENGINE_ID).setNode(node).build(appContext);
+            appContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        }
     }
 
     public Optional<List<DNode>> findLastGroup(DNode node) {

@@ -1,8 +1,8 @@
-#import "MainViewController.h"
+#import "NativePage2ViewController.h"
 #import "Masonry/Masonry.h"
 #import "d_stack/DStack.h"
 
-@interface MainViewController ()
+@interface NativePage2ViewController ()
 
 @property (nonatomic, readonly) CGFloat statusBarHeight;
 @property (nonatomic, readonly) CGFloat navigationBarHeight;
@@ -11,7 +11,7 @@
 
 @end
 
-@implementation MainViewController
+@implementation NativePage2ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -32,7 +32,7 @@
 
 - (void)initView {
     self.view.backgroundColor = UIColor.whiteColor;
-    [self setTitle:@"MainViewContoller"];
+    [self setTitle:@"NativePage2ViewController"];
 
     UIStackView *stack = [[UIStackView alloc] init];
     [self.view addSubview:stack];
