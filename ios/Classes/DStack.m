@@ -1,5 +1,4 @@
 #import "DStack.h"
-#import <Flutter/Flutter.h>
 #import <UIKit/UIKit.h>
 #import "DNavigationManager.h"
 

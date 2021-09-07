@@ -54,7 +54,7 @@
                primaryAction:[UIAction actionWithHandler:^(__kindof UIAction * _Nonnull action) {
         [DStack.shared pushRoute:@"flutterPage2"];
     }]];
-    [pushFlutter2 setTitle:@"push(FlutterPage1)" forState:UIControlStateNormal];
+    [pushFlutter2 setTitle:@"push(FlutterPage2)" forState:UIControlStateNormal];
     [stack addArrangedSubview:pushFlutter2];
 
     UIButton *pushNative1 = [UIButton buttonWithType:UIButtonTypeSystem

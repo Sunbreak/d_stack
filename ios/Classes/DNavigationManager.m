@@ -10,6 +10,13 @@ static inline DNode *createDNode(NSString *routeName) {
 
 @implementation DNode
 
+- (NSDictionary *)toDictionary {
+    return @{
+        @"identifier": self.identifier,
+        @"routeName": self.routeName,
+    };
+}
+
 @end
 
 @interface DNavigationManager ()
@@ -42,6 +49,7 @@ static inline DNode *createDNode(NSString *routeName) {
     DNode *node = createDNode(routeName);
     [self putNodeIfAbsent:node];
 
+    // TODO push native page
     UINavigationController *navigation = UIApplication.sharedApplication.keyWindow.rootViewController;
     navigation.navigationBarHidden = YES;
     DFlutterViewController *flutterViewController = [[DFlutterViewController alloc] initWithDNode:node];
@@ -68,7 +76,7 @@ static inline DNode *createDNode(NSString *routeName) {
     if (self.nodeGroups.count <= 0) {
         [self.nodeGroups addObject:[[NSMutableArray alloc] initWithObjects:node, nil]];
     } else {
-        [[self.nodeGroups lastObject] addObject:node];
+        [self.nodeGroups.lastObject addObject:node];
     }
 }
 

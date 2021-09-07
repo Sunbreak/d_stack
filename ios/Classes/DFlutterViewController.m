@@ -1,5 +1,6 @@
 #import "DFlutterViewController.h"
 #import "DStack.h"
+#import "DStackPlugin.h"
 
 @interface DFlutterViewController ()
 
@@ -14,7 +15,7 @@
 @implementation DFlutterViewController
 
 - (instancetype)initWithDNode:(DNode *)node {
-    self = [super init];
+    self = [super initWithEngine:DStack.shared.flutterEngine nibName:nil bundle:nil];
     if (self) {
         _node = node;
     }
@@ -29,6 +30,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self attachToEngine];
+    NSMutableArray *group = [DNavigationManager.shared findLastGroup:self.node];
+    [DStackPlugin.shared activateFlutterNode:group.lastObject];
 }
 
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
