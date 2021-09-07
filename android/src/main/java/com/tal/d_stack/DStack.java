@@ -1,6 +1,9 @@
 package com.tal.d_stack;
 
 import android.content.Context;
+import android.content.Intent;
+
+import java.util.Map;
 
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.FlutterEngineCache;
@@ -33,6 +36,14 @@ public class DStack {
             FlutterEngineCache.getInstance().put(ENGINE_ID, flutterEngine);
             running = true;
         }
+    }
+
+    public interface NativeRoute {
+        Intent build(Context context);
+    }
+
+    public void registerRoute(Map<String, NativeRoute> routeMap) {
+        DNavigationManager.getInstance().registerRoute(routeMap);
     }
 
     public void pushRoute(String routeName) {

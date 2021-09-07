@@ -8,12 +8,12 @@ import androidx.annotation.Nullable;
 
 import com.tal.d_stack.DStack;
 
-public class MainActivity extends Activity {
+public class NativePage1Activity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        setTitle("MainActivity");
+        setContentView(R.layout.activity_native_page1);
+        setTitle("NativePage1");
 
         findViewById(R.id.push_flutter_1).setOnClickListener((View v) -> {
             DStack.getInstance().pushRoute("flutterPage1");
