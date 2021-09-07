@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.List;
+
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.android.FlutterView;
 import io.flutter.embedding.engine.FlutterEngine;
@@ -26,9 +28,6 @@ public class DFlutterActivity extends FlutterActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         flutterView = findFlutterView(getWindow().getDecorView());
-        // FIXME
-        DNode node = getIntent().getParcelableExtra(EXTRA_NODE);
-        System.out.println("node " + node.identifier);
     }
 
     private FlutterView findFlutterView(View view) {
@@ -61,6 +60,12 @@ public class DFlutterActivity extends FlutterActivity {
     protected void onResume() {
         super.onResume();
         flutterView.attachToFlutterEngine(getFlutterEngine());
+        List<DNode> group = DNavigationManager.getInstance().findLastGroup(getRootNode()).get();
+        DStackPlugin.getInstance().activateFlutterNode(group.get(group.size() - 1));
+    }
+
+    private DNode getRootNode() {
+        return getIntent().getParcelableExtra(EXTRA_NODE);
     }
 
     @Override

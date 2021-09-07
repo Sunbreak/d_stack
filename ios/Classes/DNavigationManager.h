@@ -5,6 +5,8 @@
 @property (nonatomic, strong) NSString *identifier;
 @property (nonatomic, strong) NSString *routeName;
 
+- (NSDictionary *)toDictionary;
+
 @end
 
 @interface DNavigationManager : NSObject
@@ -14,5 +16,7 @@
 - (instancetype)init NS_UNAVAILABLE;
 
 - (void)pushRoute:(NSString *)routeName;
+
+- (NSMutableArray *)findLastGroup:(DNode *)node;
 
 @end

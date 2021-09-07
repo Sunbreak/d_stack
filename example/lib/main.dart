@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:d_stack/d_stack.dart';
+import 'package:flutter/material.dart';
 
 void main() {
+  DStack.init(routeMap);
   runApp(MyApp());
 }
 
@@ -14,45 +12,91 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-
   @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await DStack.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => DStackApp();
 }
+
+final routeMap = <String, TRouteBuilder>{
+  'flutterPage1': (DNode node) {
+    return page1Builder;
+  },
+  'flutterPage2': (DNode node) {
+    return page2Builder;
+  }
+};
+
+final WidgetBuilder page1Builder = (BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('FlutterPage1'),
+    ),
+    body: Center(
+      child: Column(
+        children: [
+          ElevatedButton(
+            child: Text('push(nativePage1)'),
+            onPressed: () {
+              // DStack.push('nativePage1');
+            },
+          ),
+          ElevatedButton(
+            child: Text('push(nativePage2)'),
+            onPressed: () {
+              // DStack.push('nativePage2');
+            },
+          ),
+          ElevatedButton(
+            child: Text('push(flutterPage1)'),
+            onPressed: () {
+              // DStack.push('flutterPage1');
+            },
+          ),
+          ElevatedButton(
+            child: Text('push(flutterPage2)'),
+            onPressed: () {
+              // DStack.push('flutterPage2');
+            },
+          ),
+        ],
+      ),
+    ),
+  );
+};
+
+final WidgetBuilder page2Builder = (BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('FlutterPage2'),
+    ),
+    body: Center(
+      child: Column(
+        children: [
+          ElevatedButton(
+            child: Text('push(nativePage1)'),
+            onPressed: () {
+              // DStack.push('nativePage1');
+            },
+          ),
+          ElevatedButton(
+            child: Text('push(nativePage2)'),
+            onPressed: () {
+              // DStack.push('nativePage2');
+            },
+          ),
+          ElevatedButton(
+            child: Text('push(flutterPage1)'),
+            onPressed: () {
+              // DStack.push('flutterPage1');
+            },
+          ),
+          ElevatedButton(
+            child: Text('push(flutterPage2)'),
+            onPressed: () {
+              // DStack.push('flutterPage2');
+            },
+          ),
+        ],
+      ),
+    ),
+  );
+};
