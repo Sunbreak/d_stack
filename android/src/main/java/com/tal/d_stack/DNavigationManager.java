@@ -7,7 +7,9 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -47,6 +49,13 @@ import java.util.UUID;
         dest.writeString(identifier);
         dest.writeString(routeName);
     }
+
+    public Map<String, Object> toMap() {
+        return new HashMap() {{
+            put("identifier", identifier);
+            put("routeName", routeName);
+        }};
+    }
 }
 
 /*package*/ class DNavigationManager {
@@ -81,7 +90,7 @@ import java.util.UUID;
     public Optional<List<DNode>> findLastGroup(DNode node) {
         // TODO reverse
         return nodeGroups.stream().filter(group -> {
-            return group.stream().anyMatch(n -> n.identifier == node.identifier);
+            return group.stream().anyMatch(n -> n.identifier.equals(node.identifier));
         }).findFirst();
     }
 

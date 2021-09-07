@@ -47,7 +47,7 @@ public class DStackPlugin implements FlutterPlugin, MethodCallHandler {
     public void activateFlutterNode(DNode node) {
         channel.invokeMethod(METHOD_ACTION_TO_FLUTTER, new HashMap() {{
             put("action", ACTION_ACTIVATE);
-            put("node", node);
+            put("node", node.toMap());
         }});
     }
 }
