@@ -21,7 +21,8 @@ static inline DNode *createDNode(NSString *routeName) {
 
 @interface DNavigationManager ()
 
-- (NSMutableArray<NSMutableArray *> * const)nodeGroups;
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, NativeRoute> *routeMap;
+@property (nonatomic, strong, readonly) NSMutableArray<NSMutableArray *> *nodeGroups;
 
 @end
 
@@ -36,24 +37,32 @@ static inline DNode *createDNode(NSString *routeName) {
     return instance;
 }
 
-- (NSMutableArray<NSMutableArray *> * const)nodeGroups {
-    static NSMutableArray<NSMutableArray *> *instance;
-    static dispatch_once_t once;
-    dispatch_once(&once, ^{
-        instance = [[NSMutableArray alloc] init];
-    });
-    return instance;
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _nodeGroups = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
+- (void)registerRoute:(NSDictionary<NSString *, NativeRoute> *)routeMap {
+    _routeMap = [[NSDictionary alloc] initWithDictionary:routeMap];
 }
 
 - (void)pushRoute:(NSString *)routeName {
     DNode *node = createDNode(routeName);
     [self putNodeIfAbsent:node];
 
-    // TODO push native page
-    UINavigationController *navigation = UIApplication.sharedApplication.keyWindow.rootViewController;
-    navigation.navigationBarHidden = YES;
-    DFlutterViewController *flutterViewController = [[DFlutterViewController alloc] initWithDNode:node];
-    [navigation pushViewController:flutterViewController animated:YES];
+    NativeRoute nativeRoute = self.routeMap[routeName];
+    if (nativeRoute) {
+        UINavigationController *navigation = UIApplication.sharedApplication.keyWindow.rootViewController;
+        navigation.navigationBarHidden = NO;
+        [navigation pushViewController:nativeRoute() animated:YES];
+    } else {
+        UINavigationController *navigation = UIApplication.sharedApplication.keyWindow.rootViewController;
+        navigation.navigationBarHidden = YES;
+        [navigation pushViewController:[[DFlutterViewController alloc] initWithDNode:node] animated:YES];
+    }
 }
 
 - (NSMutableArray *)findLastGroup:(DNode *)node {

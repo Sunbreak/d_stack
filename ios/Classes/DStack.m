@@ -28,6 +28,10 @@ NSString * const EngineId = @"d_stack_engine";
     }
 }
 
+- (void)registerRoute:(NSDictionary<NSString *,NativeRoute> *)routeMap {
+    [DNavigationManager.shared registerRoute:routeMap];
+}
+
 - (void)pushRoute:(NSString *)routeName {
     [DNavigationManager.shared pushRoute:routeName];
 }

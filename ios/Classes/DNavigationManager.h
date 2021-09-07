@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import "DStack.h"
 
 @interface DNode : NSObject
 
@@ -14,6 +15,8 @@
 @property (class, nonatomic, readonly) DNavigationManager *shared;
 
 - (instancetype)init NS_UNAVAILABLE;
+
+- (void)registerRoute:(NSDictionary<NSString *, NativeRoute> *)routeMap;
 
 - (void)pushRoute:(NSString *)routeName;
 
