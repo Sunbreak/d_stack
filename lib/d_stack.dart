@@ -18,4 +18,11 @@ class DStack {
   }
 
   static TRouteBuilder getRouteBuilder(routeName) => _routeBuilders[routeName]!;
+
+  static Future<void> pushRoute(String routeName) async {
+    DChannel.instance.invokeActionToNative({
+      'action': kActionPush,
+      'routeName': routeName,
+    });
+  }
 }

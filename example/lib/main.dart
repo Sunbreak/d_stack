@@ -36,25 +36,25 @@ final WidgetBuilder page1Builder = (BuildContext context) {
           ElevatedButton(
             child: Text('push(nativePage1)'),
             onPressed: () {
-              // DStack.push('nativePage1');
+              DStack.pushRoute('nativePage1');
             },
           ),
           ElevatedButton(
             child: Text('push(nativePage2)'),
             onPressed: () {
-              // DStack.push('nativePage2');
+              DStack.pushRoute('nativePage2');
             },
           ),
           ElevatedButton(
             child: Text('push(flutterPage1)'),
             onPressed: () {
-              // DStack.push('flutterPage1');
+              DStack.pushRoute('flutterPage1');
             },
           ),
           ElevatedButton(
             child: Text('push(flutterPage2)'),
             onPressed: () {
-              // DStack.push('flutterPage2');
+              DStack.pushRoute('flutterPage2');
             },
           ),
         ],
@@ -74,25 +74,25 @@ final WidgetBuilder page2Builder = (BuildContext context) {
           ElevatedButton(
             child: Text('push(nativePage1)'),
             onPressed: () {
-              // DStack.push('nativePage1');
+              DStack.pushRoute('nativePage1');
             },
           ),
           ElevatedButton(
             child: Text('push(nativePage2)'),
             onPressed: () {
-              // DStack.push('nativePage2');
+              DStack.pushRoute('nativePage2');
             },
           ),
           ElevatedButton(
             child: Text('push(flutterPage1)'),
             onPressed: () {
-              // DStack.push('flutterPage1');
+              DStack.pushRoute('flutterPage1');
             },
           ),
           ElevatedButton(
             child: Text('push(flutterPage2)'),
             onPressed: () {
-              // DStack.push('flutterPage2');
+              DStack.pushRoute('flutterPage2');
             },
           ),
         ],

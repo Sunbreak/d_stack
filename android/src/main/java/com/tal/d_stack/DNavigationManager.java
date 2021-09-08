@@ -110,7 +110,8 @@ import java.util.UUID;
 
         // TODO native type
         if (nodeGroups.isEmpty()) {
-            nodeGroups.add(Arrays.asList(node));
+            // Arrays.asList() results in immutable List
+            nodeGroups.add(new ArrayList<>(Arrays.asList(node)));
         } else {
             nodeGroups.get(nodeGroups.size() - 1).add(node);
         }

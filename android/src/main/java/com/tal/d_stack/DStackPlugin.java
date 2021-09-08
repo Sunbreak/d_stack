@@ -3,6 +3,7 @@ package com.tal.d_stack;
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
@@ -15,7 +16,9 @@ import io.flutter.plugin.common.MethodChannel.Result;
  */
 public class DStackPlugin implements FlutterPlugin, MethodCallHandler {
     public static final String METHOD_ACTION_TO_FLUTTER = "methodActionToFlutter";
+    public static final String METHOD_ACTION_TO_NATIVE = "methodActionToNative";
 
+    public static final String ACTION_PUSH = "push";
     public static final String ACTION_ACTIVATE = "activate";
 
     public static DStackPlugin getInstance() {
@@ -41,7 +44,16 @@ public class DStackPlugin implements FlutterPlugin, MethodCallHandler {
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-        result.notImplemented();
+        if (call.method.equals(METHOD_ACTION_TO_NATIVE)) {
+            Map<String, Object> args = (Map<String, Object>) call.arguments;
+            String action = (String) args.get("action");
+            if (action.equals(ACTION_PUSH)) {
+                DNavigationManager.getInstance().pushRoute((String) args.get("routeName"));
+            }
+            result.success(null);
+        } else {
+            result.notImplemented();
+        }
     }
 
     public void activateFlutterNode(DNode node) {
