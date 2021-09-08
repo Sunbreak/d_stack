@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.List;
-
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.android.FlutterView;
 import io.flutter.embedding.engine.FlutterEngine;
@@ -60,8 +58,8 @@ public class DFlutterActivity extends FlutterActivity {
     protected void onResume() {
         super.onResume();
         flutterView.attachToFlutterEngine(getFlutterEngine());
-        List<DNode> group = DNavigationManager.getInstance().findLastGroup(getRootNode()).get();
-        DStackPlugin.getInstance().activateFlutterNode(group.get(group.size() - 1));
+        DNode topNode = DNavigationManager.getInstance().findTopNode(getRootNode());
+        DStackPlugin.getInstance().activateFlutterNode(topNode);
     }
 
     private DNode getRootNode() {
