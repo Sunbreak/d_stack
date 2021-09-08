@@ -4,7 +4,9 @@ import 'd_entity.dart';
 import 'd_stack_app.dart';
 
 const String kMethodActionToFlutter = 'methodActionToFlutter';
+const String kMethodActionToNative = 'methodActionToNative';
 
+const String kActionPush = "push";
 const String kActionActivate = "activate";
 const String kActionRemove = "remove";
 
@@ -44,4 +46,7 @@ class DChannel {
         break;
     }
   }
+
+  Future<void> invokeActionToNative(Map<String, Object> args) =>
+      _channel.invokeMethod(kMethodActionToNative, args);
 }

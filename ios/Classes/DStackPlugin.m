@@ -1,7 +1,9 @@
 #import "DStackPlugin.h"
 
 NSString * const kMethodActionToFlutter = @"methodActionToFlutter";
+NSString * const kMethodActionToNative = @"methodActionToNative";
 
+NSString * const kActionPush = @"push";
 NSString * const kActionActivate = @"activate";
 
 @interface DStackPlugin ()
@@ -29,6 +31,13 @@ NSString * const kActionActivate = @"activate";
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+    if ([call.method isEqual:kMethodActionToNative]) {
+        NSDictionary *args = call.arguments;
+        NSString *action = args[@"action"];
+        if ([action isEqual:kActionPush]) {
+            [DNavigationManager.shared pushRoute:args[@"routeName"]];
+        }
+    }
     result(FlutterMethodNotImplemented);
 }
 
