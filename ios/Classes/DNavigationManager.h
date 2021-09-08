@@ -5,6 +5,7 @@
 
 @property (nonatomic, strong) NSString *identifier;
 @property (nonatomic, strong) NSString *routeName;
+@property (nonatomic, assign) int type;
 
 - (NSDictionary *)toDictionary;
 
@@ -20,6 +21,6 @@
 
 - (void)pushRoute:(NSString *)routeName;
 
-- (NSMutableArray *)findLastGroup:(DNode *)node;
+- (DNode *)findTopNode:(DNode *)node;
 
 @end

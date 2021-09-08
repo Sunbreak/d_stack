@@ -30,8 +30,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self attachToEngine];
-    NSMutableArray *group = [DNavigationManager.shared findLastGroup:self.node];
-    [DStackPlugin.shared activateFlutterNode:group.lastObject];
+    DNode *topNode = [DNavigationManager.shared findTopNode:self.node];
+    [DStackPlugin.shared activateFlutterNode:topNode];
 }
 
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
