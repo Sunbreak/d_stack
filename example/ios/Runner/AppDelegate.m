@@ -10,8 +10,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [DStack.shared initialize];
     [DStack.shared registerRoute:@{
-        @"nativePage1": ^() { return [[NativePage1ViewController alloc] init]; },
-        @"nativePage2": ^() { return [[NativePage2ViewController alloc] init]; },
+        @"nativePage1": ^UIViewController *{ return [[NativePage1ViewController alloc] init]; },
+        @"nativePage2": ^UIViewController *{ return [[NativePage2ViewController alloc] init]; },
     }];
 
     [GeneratedPluginRegistrant registerWithRegistry:DStack.shared.flutterEngine];
