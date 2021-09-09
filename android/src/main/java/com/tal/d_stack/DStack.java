@@ -49,4 +49,8 @@ public class DStack {
     public void pushRoute(String routeName) {
         DNavigationManager.getInstance().pushRoute(routeName);
     }
+
+    public void pop() {
+        DNavigationManager.getInstance().pop();
+    }
 }

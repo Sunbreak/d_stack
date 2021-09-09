@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -98,6 +99,7 @@ import java.util.function.Predicate;
 
     public void init(Context context) {
         appContext = context.getApplicationContext();
+        ((Application) appContext).registerActivityLifecycleCallbacks(this);
     }
 
     public void registerRoute(Map<String, DStack.NativeRoute> routeMap) {
@@ -125,11 +127,32 @@ import java.util.function.Predicate;
         }
     }
 
+    public void pop() {
+        // TODO nodeGroups empty
+        DNodeGroup lastGroup = nodeGroups.get(nodeGroups.size() - 1);
+        DNode lastNode = lastGroup.nodes.get(lastGroup.nodes.size() - 1);
+
+        if (lastNode.type == DNode.TYPE_NATIVE  // native popTo native/flutter or OUTSIDE
+                || lastGroup.nodes.size() == 1  // last flutter popTo native or OUTSIDE
+        ) {
+            // node/activity and group will be remove in onActivityDestroyed
+            lastGroup.activities.get(lastNode.identifier).finish();
+        } else {
+            // flutter popTo flutter
+            DNode preNode = lastGroup.nodes.get(lastGroup.nodes.size() - 2);
+            lastGroup.nodes.remove(lastNode);
+            lastGroup.activities.remove(lastNode.identifier);
+            // TODO removeFlutterNodes(lastNode);
+            DStackPlugin.getInstance().activateFlutterNode(preNode);
+        }
+    }
+
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
         if (activity.getIntent().hasExtra(DFlutterActivity.EXTRA_NODE)) {
             // Before created, DNode within activity should be in DNode groups
             DNode node = activity.getIntent().getParcelableExtra(DFlutterActivity.EXTRA_NODE);
+            Log.d("DStack", "onActivityCreated " + activity + ", node " + node);
             findLastGroup(node).get().activities.put(node.identifier, activity);
         }
     }
@@ -139,6 +162,7 @@ import java.util.function.Predicate;
         if (activity.getIntent().hasExtra(DFlutterActivity.EXTRA_NODE)) {
             // Before destroyed, DNode within activity could be removed already
             DNode node = activity.getIntent().getParcelableExtra(DFlutterActivity.EXTRA_NODE);
+            Log.d("DStack", "onActivityCreated " + activity + ", node " + node);
             findLastGroup(node).ifPresent(group -> {
                 group.activities.remove(node.identifier);
                 Iterables.removeAll(group.nodes, n -> n.identifier.equals(node.identifier));
