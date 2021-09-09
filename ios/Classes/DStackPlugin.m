@@ -37,8 +37,10 @@ NSString * const kActionActivate = @"activate";
         if ([action isEqual:kActionPush]) {
             [DNavigationManager.shared pushRoute:args[@"routeName"]];
         }
+        result(nil);
+    } else {
+        result(FlutterMethodNotImplemented);
     }
-    result(FlutterMethodNotImplemented);
 }
 
 - (void)activateFlutterNode:(DNode *)node {

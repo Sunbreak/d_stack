@@ -1,10 +1,17 @@
 #import "DNavigationManager.h"
 #import "DFlutterViewController.h"
+#import "DStackPlugin.h"
 
-static inline DNode *createDNode(NSString *routeName) {
+#pragma - mark DNode
+
+const int kTypeFlutter = 0;
+const int kTypeNative = 0;
+
+static inline DNode *createDNode(NSString *routeName, int type) {
     DNode *node = [[DNode alloc] init];
     node.identifier = [[NSUUID UUID] UUIDString];
     node.routeName = routeName;
+    node.type = type;
     return node;
 }
 
@@ -14,15 +21,41 @@ static inline DNode *createDNode(NSString *routeName) {
     return @{
         @"identifier": self.identifier,
         @"routeName": self.routeName,
+        @"type": @(self.type),
     };
 }
 
 @end
 
+#pragma - mark DNodeGroup
+
+@interface DNodeGroup : NSObject
+
+@property (nonatomic, strong, readonly) NSMutableArray<DNode *> *nodes;
+@property (nonatomic, strong, readonly) NSMutableDictionary<NSString *, UIViewController *> *viewControllers; // TODO weak
+
+@end
+
+@implementation DNodeGroup
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _nodes = [[NSMutableArray alloc] init];
+        _viewControllers = [[NSMutableDictionary alloc] init];
+    }
+    return self;
+}
+
+@end
+
+#pragma - mark DNavigationManager
+
 @interface DNavigationManager ()
 
 @property (nonatomic, strong, readonly) NSDictionary<NSString *, NativeRoute> *routeMap;
-@property (nonatomic, strong, readonly) NSMutableArray<NSMutableArray *> *nodeGroups;
+@property (nonatomic, strong, readonly) NSMutableArray<DNodeGroup *> *nodeGroups;
 
 @end
 
@@ -50,42 +83,58 @@ static inline DNode *createDNode(NSString *routeName) {
 }
 
 - (void)pushRoute:(NSString *)routeName {
-    DNode *node = createDNode(routeName);
-    [self putNodeIfAbsent:node];
-
     NativeRoute nativeRoute = self.routeMap[routeName];
+    DNode *node = createDNode(routeName, nativeRoute ? kTypeNative : kTypeFlutter);
+    [self addNodeOrGroup:node];
+    DNodeGroup *group = self.nodeGroups.lastObject;
+
     if (nativeRoute) {
+        UIViewController *viewController = nativeRoute();
+        group.viewControllers[node.identifier] = viewController;
+
         UINavigationController *navigation = UIApplication.sharedApplication.keyWindow.rootViewController;
         navigation.navigationBarHidden = NO;
-        [navigation pushViewController:nativeRoute() animated:YES];
+        [navigation pushViewController:viewController animated:YES];
     } else {
-        UINavigationController *navigation = UIApplication.sharedApplication.keyWindow.rootViewController;
-        navigation.navigationBarHidden = YES;
-        [navigation pushViewController:[[DFlutterViewController alloc] initWithDNode:node] animated:YES];
+        if (group.viewControllers.count == 0) {
+            UIViewController *viewController = [[DFlutterViewController alloc] initWithDNode:node];
+            group.viewControllers[node.identifier] = viewController;
+
+            UINavigationController *navigation = UIApplication.sharedApplication.keyWindow.rootViewController;
+            navigation.navigationBarHidden = YES;
+            [navigation pushViewController:viewController animated:YES];
+        } else {
+            [DStackPlugin.shared activateFlutterNode:node];
+        }
     }
 }
 
-- (NSMutableArray *)findLastGroup:(DNode *)node {
+- (DNode *)findTopNode:(DNode *)node {
     // TODO reverse
-    for (NSMutableArray *group in self.nodeGroups) {
-        for (DNode *n in group) {
+    for (DNodeGroup *group in self.nodeGroups) {
+        for (DNode *n in group.nodes) {
             if ([n.identifier isEqual:node.identifier]) {
-                return group;
+                return group.nodes.lastObject;
             }
         }
     }
     return nil;
 }
 
-- (void)putNodeIfAbsent:(DNode *)node {
-    NSMutableArray *group = [self findLastGroup:node];
-    if (group != nil) return;
-
-    // TODO native page
+- (void)addNodeOrGroup:(DNode *)node {
     if (self.nodeGroups.count <= 0) {
-        [self.nodeGroups addObject:[[NSMutableArray alloc] initWithObjects:node, nil]];
+        DNodeGroup *group = [[DNodeGroup alloc] init];
+        [group.nodes addObject:node];
+        [self.nodeGroups addObject:group];
     } else {
-        [self.nodeGroups.lastObject addObject:node];
+        DNodeGroup *lastGroup = self.nodeGroups.lastObject;
+        if (lastGroup.nodes.firstObject.type == node.type) {
+            [lastGroup.nodes addObject:node];
+        } else {
+            DNodeGroup *group = [[DNodeGroup alloc] init];
+            [group.nodes addObject:node];
+            [self.nodeGroups addObject:group];
+        }
     }
 }
 
