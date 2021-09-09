@@ -15,6 +15,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationController.navigationBarHidden = NO;
     [self initView];
 }
 
@@ -70,6 +71,11 @@
     }]];
     [pushNative2 setTitle:@"push(NativePage2)" forState:UIControlStateNormal];
     [stack addArrangedSubview:pushNative2];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = NO;
 }
 
 @end

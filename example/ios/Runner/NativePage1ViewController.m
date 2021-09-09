@@ -15,6 +15,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationController.navigationBarHidden = NO;
     [self initView];
 }
 
@@ -70,6 +71,18 @@
     }]];
     [pushNative2 setTitle:@"push(NativePage2)" forState:UIControlStateNormal];
     [stack addArrangedSubview:pushNative2];
+
+    UIButton *pop = [UIButton buttonWithType:UIButtonTypeSystem
+               primaryAction:[UIAction actionWithHandler:^(__kindof UIAction * _Nonnull action) {
+        [DStack.shared pop];
+    }]];
+    [pop setTitle:@"pop" forState:UIControlStateNormal];
+    [stack addArrangedSubview:pop];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = NO;
 }
 
 @end

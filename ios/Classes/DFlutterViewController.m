@@ -4,11 +4,7 @@
 
 @interface DFlutterViewController ()
 
-// private setter
-@property (nonatomic, strong, readwrite) DNode *node;
-
-- (void)attachToEngine;
-- (void)detachFromEngine;
+@property (nonatomic, strong, readwrite) DNode *rootNode;
 
 @end
 
@@ -17,7 +13,7 @@
 - (instancetype)initWithDNode:(DNode *)node {
     self = [super initWithEngine:DStack.shared.flutterEngine nibName:nil bundle:nil];
     if (self) {
-        _node = node;
+        _rootNode = node;
     }
     return self;
 }
@@ -29,8 +25,9 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
     [self attachToEngine];
-    DNode *topNode = [DNavigationManager.shared findTopNode:self.node];
+    DNode *topNode = [DNavigationManager.shared findTopNode:self.rootNode];
     [DStackPlugin.shared activateFlutterNode:topNode];
 }
 

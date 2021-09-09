@@ -4,8 +4,6 @@
 
 @interface DFlutterViewController : FlutterViewController
 
-@property (nonatomic, strong, readonly) DNode *node;
-
 #pragma mark - NS_UNAVAILABLE
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithEngine:(FlutterEngine *)engine

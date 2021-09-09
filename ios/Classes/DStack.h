@@ -19,4 +19,6 @@ typedef UIViewController *(^NativeRoute)(void);
 
 - (void)pushRoute:(NSString *)routeName;
 
+- (void)pop;
+
 @end

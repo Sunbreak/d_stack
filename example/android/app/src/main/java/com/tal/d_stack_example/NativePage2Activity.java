@@ -30,5 +30,9 @@ public class NativePage2Activity extends Activity {
         findViewById(R.id.push_native_2).setOnClickListener((View v) -> {
             DStack.getInstance().pushRoute("nativePage2");
         });
+
+        findViewById(R.id.pop).setOnClickListener((View v) -> {
+            DStack.getInstance().pop();
+        });
     }
 }

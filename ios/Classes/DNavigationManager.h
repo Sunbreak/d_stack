@@ -21,6 +21,8 @@
 
 - (void)pushRoute:(NSString *)routeName;
 
+- (void)pop;
+
 - (DNode *)findTopNode:(DNode *)node;
 
 @end
