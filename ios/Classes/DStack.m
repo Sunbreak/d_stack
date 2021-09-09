@@ -36,4 +36,8 @@ NSString * const EngineId = @"d_stack_engine";
     [DNavigationManager.shared pushRoute:routeName];
 }
 
+- (void)pop {
+    [DNavigationManager.shared pop];
+}
+
 @end

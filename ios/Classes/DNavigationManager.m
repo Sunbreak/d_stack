@@ -32,7 +32,7 @@ static inline DNode *createDNode(NSString *routeName, int type) {
 @interface DNodeGroup : NSObject
 
 @property (nonatomic, strong, readonly) NSMutableArray<DNode *> *nodes;
-@property (nonatomic, strong, readonly) NSMutableDictionary<NSString *, UIViewController *> *viewControllers; // TODO weak
+@property (nonatomic, strong, readonly) NSMapTable<NSString *, UIViewController *> *weakControllers;
 
 @end
 
@@ -43,7 +43,9 @@ static inline DNode *createDNode(NSString *routeName, int type) {
     self = [super init];
     if (self) {
         _nodes = [[NSMutableArray alloc] init];
-        _viewControllers = [[NSMutableDictionary alloc] init];
+        _weakControllers = [[NSMapTable alloc] initWithKeyOptions:NSPointerFunctionsStrongMemory
+                                                     valueOptions:NSPointerFunctionsWeakMemory
+                                                         capacity:0];
     }
     return self;
 }
@@ -90,22 +92,46 @@ static inline DNode *createDNode(NSString *routeName, int type) {
 
     if (nativeRoute) {
         UIViewController *viewController = nativeRoute();
-        group.viewControllers[node.identifier] = viewController;
+        [group.weakControllers setObject:viewController forKey:node.identifier];
 
         UINavigationController *navigation = UIApplication.sharedApplication.keyWindow.rootViewController;
-        navigation.navigationBarHidden = NO;
         [navigation pushViewController:viewController animated:YES];
     } else {
-        if (group.viewControllers.count == 0) {
+        if (group.weakControllers.count == 0) {
             UIViewController *viewController = [[DFlutterViewController alloc] initWithDNode:node];
-            group.viewControllers[node.identifier] = viewController;
+            [group.weakControllers setObject:viewController forKey:node.identifier];
 
             UINavigationController *navigation = UIApplication.sharedApplication.keyWindow.rootViewController;
-            navigation.navigationBarHidden = YES;
             [navigation pushViewController:viewController animated:YES];
         } else {
             [DStackPlugin.shared activateFlutterNode:node];
         }
+    }
+}
+
+- (void)pop {
+    // TODO nodeGroups empty
+    DNodeGroup *lastGroup = self.nodeGroups.lastObject;
+    DNode *lastNode = lastGroup.nodes.lastObject;
+
+    if (lastNode.type == kTypeNative    // native popTo native/flutter or OUTSIDE
+        || lastGroup.nodes.count == 1   // last flutter popTo native or OUTSIDE
+    ) {
+        UIViewController *weakController = [lastGroup.weakControllers objectForKey:lastNode.identifier];
+        [lastGroup.nodes removeObject:lastNode];
+        if (lastGroup.nodes.count == 0) {
+            [self.nodeGroups removeObject:lastGroup];
+        }
+        if (weakController != nil) {
+            [lastGroup.weakControllers removeObjectForKey:lastNode.identifier];
+            [weakController.navigationController popViewControllerAnimated:YES];
+        }
+    } else {
+        // flutter popTo flutter
+        DNode *preNode = lastGroup.nodes[lastGroup.nodes.count - 2];
+        [lastGroup.nodes removeObject:lastNode];
+        // TODO removeFlutterNodes:lastNode;
+        [DStackPlugin.shared activateFlutterNode:preNode];
     }
 }
 
