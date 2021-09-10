@@ -19,6 +19,7 @@ public class DStackPlugin implements FlutterPlugin, MethodCallHandler {
     public static final String METHOD_ACTION_TO_NATIVE = "methodActionToNative";
 
     public static final String ACTION_PUSH = "push";
+    public static final String ACTION_POP = "pop";
     public static final String ACTION_ACTIVATE = "activate";
 
     public static DStackPlugin getInstance() {
@@ -49,6 +50,8 @@ public class DStackPlugin implements FlutterPlugin, MethodCallHandler {
             String action = (String) args.get("action");
             if (action.equals(ACTION_PUSH)) {
                 DNavigationManager.getInstance().pushRoute((String) args.get("routeName"));
+            } else if (action.equals(ACTION_POP)) {
+                DNavigationManager.getInstance().pop();
             }
             result.success(null);
         } else {
