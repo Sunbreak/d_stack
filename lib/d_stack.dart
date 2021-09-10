@@ -19,10 +19,16 @@ class DStack {
 
   static TRouteBuilder getRouteBuilder(routeName) => _routeBuilders[routeName]!;
 
-  static Future<void> pushRoute(String routeName) async {
+  static void pushRoute(String routeName) {
     DChannel.instance.invokeActionToNative({
       'action': kActionPush,
       'routeName': routeName,
+    });
+  }
+
+  static Future<void> pop() async {
+    DChannel.instance.invokeActionToNative({
+      'action': kActionPop,
     });
   }
 }

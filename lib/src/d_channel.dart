@@ -7,6 +7,7 @@ const String kMethodActionToFlutter = 'methodActionToFlutter';
 const String kMethodActionToNative = 'methodActionToNative';
 
 const String kActionPush = "push";
+const String kActionPop = "pop";
 const String kActionActivate = "activate";
 const String kActionRemove = "remove";
 

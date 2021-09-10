@@ -4,6 +4,7 @@ NSString * const kMethodActionToFlutter = @"methodActionToFlutter";
 NSString * const kMethodActionToNative = @"methodActionToNative";
 
 NSString * const kActionPush = @"push";
+NSString * const kActionPop = @"pop";
 NSString * const kActionActivate = @"activate";
 
 @interface DStackPlugin ()
@@ -36,6 +37,8 @@ NSString * const kActionActivate = @"activate";
         NSString *action = args[@"action"];
         if ([action isEqual:kActionPush]) {
             [DNavigationManager.shared pushRoute:args[@"routeName"]];
+        } else if ([action isEqual:kActionPop]) {
+            [DNavigationManager.shared pop];
         }
         result(nil);
     } else {

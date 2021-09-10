@@ -57,6 +57,12 @@ final WidgetBuilder page1Builder = (BuildContext context) {
               DStack.pushRoute('flutterPage2');
             },
           ),
+          ElevatedButton(
+            child: Text('pop'),
+            onPressed: () {
+              DStack.pop();
+            },
+          ),
         ],
       ),
     ),
@@ -93,6 +99,12 @@ final WidgetBuilder page2Builder = (BuildContext context) {
             child: Text('push(flutterPage2)'),
             onPressed: () {
               DStack.pushRoute('flutterPage2');
+            },
+          ),
+          ElevatedButton(
+            child: Text('pop'),
+            onPressed: () {
+              DStack.pop();
             },
           ),
         ],
