@@ -5,7 +5,7 @@
 #pragma - mark DNode
 
 const int kTypeFlutter = 0;
-const int kTypeNative = 0;
+const int kTypeNative = 1;
 
 static inline DNode *createDNode(NSString *routeName, int type) {
     DNode *node = [[DNode alloc] init];
