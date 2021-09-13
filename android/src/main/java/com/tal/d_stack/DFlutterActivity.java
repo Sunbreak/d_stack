@@ -10,9 +10,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.lang.reflect.Field;
+
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.android.FlutterView;
 import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.embedding.engine.renderer.FlutterRenderer;
+import io.flutter.plugin.platform.PlatformPlugin;
 
 public class DFlutterActivity extends FlutterActivity {
     public static final String EXTRA_BACKGROUND_MODE = "background_mode";
@@ -21,6 +25,8 @@ public class DFlutterActivity extends FlutterActivity {
     public static final String EXTRA_NODE = "dnode";
 
     private FlutterView flutterView;
+
+    private PlatformPlugin platformPlugin;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,7 +63,7 @@ public class DFlutterActivity extends FlutterActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        flutterView.attachToFlutterEngine(getFlutterEngine());
+        performAttach();
         DNode topNode = DNavigationManager.getInstance().findTopNode(getRootNode());
         DStackPlugin.getInstance().activateFlutterNode(topNode);
     }
@@ -70,6 +76,37 @@ public class DFlutterActivity extends FlutterActivity {
     protected void onPause() {
         super.onPause();
         flutterView.detachFromFlutterEngine();
+        performDetach();
+        setIsFlutterUiDisplayed(false);
+    }
+
+    private void performAttach() {
+        if (platformPlugin == null) {
+            platformPlugin = new PlatformPlugin(getActivity(), getFlutterEngine().getPlatformChannel());
+            getFlutterEngine().getActivityControlSurface().attachToActivity(getActivity(), getLifecycle());
+            flutterView.attachToFlutterEngine(getFlutterEngine());
+        }
+    }
+
+    private void performDetach() {
+        if (platformPlugin != null) {
+            flutterView.detachFromFlutterEngine();
+            getFlutterEngine().getActivityControlSurface().detachFromActivity();
+            platformPlugin.destroy();
+            platformPlugin = null;
+        }
+    }
+
+    private void setIsFlutterUiDisplayed(boolean isDisplayed) {
+        try {
+            FlutterRenderer flutterRenderer = getFlutterEngine().getRenderer();
+            Field isDisplayingFlutterUiField = FlutterRenderer.class.getDeclaredField("isDisplayingFlutterUi");
+            isDisplayingFlutterUiField.setAccessible(true);
+            isDisplayingFlutterUiField.setBoolean(flutterRenderer, isDisplayed);
+            assert (!flutterRenderer.isDisplayingFlutterUi());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
